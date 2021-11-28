@@ -98,7 +98,7 @@ On C.Date=V.Date and C.Location=V.Location
 Join PopulationInfo P
 On C.Date=P.Date and C.Location=P.Location
 Where C.Continent = 'Europe'
-Order by 2,3
+Order by 2,3;
 
 --Using CTE to create new calculated column
 With PercVac (Continent, Location, Date, Population, New_Vaccinations, Rolling_Vaccinated)
@@ -111,7 +111,7 @@ On C.Date=P.Date and C.Location=P.Location
 Where C.Continent = 'Europe')
 Select *, (Rolling_Vaccinated/Population)*100 as Total_Vaccinated
 From PercVac
-Order by Location, Date
+Order by Location, Date;
 
 --Storing data for later use. 
 Create View Europe_Vaccinations as
@@ -120,25 +120,25 @@ From CovidData C Join VaccineInfo V
 On C.Date=V.Date and C.Location=V.Location
 Join PopulationInfo P
 On C.Date=P.Date and C.Location=P.Location
-Where C.Continent = 'Europe'
+Where C.Continent = 'Europe';
 
-
+--More queries for Tableau
 Select SUM(New_Cases) as Total_Cases, SUM(Cast(New_Deaths as int)) as Total_Deaths, Sum(CAST(New_Deaths as INT))/Sum(New_Cases)*100 as Death_Rate
 FROM CovidData
-Where Location = 'United States'
+Where Location = 'United States';
 
 Select Location, SUM(Cast(New_Deaths as int)) as Total_Deaths
 From CovidData
 Where Continent is null and Location not in ('World', 'European Union', 'International', 'High Income', 'Middle Income', 'Low Income', 'Lower Middle Income', 'Upper Middle Income')
-Group by Location
+Group by Location;
 
 Select C.Location, AVG(P.Population) Population, MAX(C.Total_Cases) as Maximum_Infections, Max((C.Total_Cases/P.Population))*100 as Percent_Infected
 From CovidData C Join PopulationInfo P
 On C.Location = P.Location and C.Date = P.Date
-Group by C.Location, C.Date 
+Group by C.Location, C.Date; 
 
 Select C.Location, P.Population, C.Date, Max(C.Total_Cases) as Highest_Infections, Max((C.Total_Cases/P.Population))*100 as Infection_Rate 
 From CovidData C Join PopulationInfo P
 On C.Location = P.Location and C.Date = P.Date
 Group by C.Location, P.Population, C.Date
-Order by Infection_Rate
+Order by Infection_Rate;
